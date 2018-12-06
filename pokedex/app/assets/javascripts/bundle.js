@@ -90,18 +90,56 @@
 /*!*********************************************!*\
   !*** ./frontend/actions/pokemon_actions.js ***!
   \*********************************************/
-/*! exports provided: RECEIVE_ALL_POKEMON, receiveAllPokemon */
+/*! exports provided: RECEIVE_ALL_POKEMON, REQUEST_ALL_POKEMON, receiveAllPokemon, requestAllPokemon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_ALL_POKEMON", function() { return RECEIVE_ALL_POKEMON; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REQUEST_ALL_POKEMON", function() { return REQUEST_ALL_POKEMON; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveAllPokemon", function() { return receiveAllPokemon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "requestAllPokemon", function() { return requestAllPokemon; });
+/* harmony import */ var _util_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/api_util */ "./frontend/util/api_util.js");
 var RECEIVE_ALL_POKEMON = "RECEIVE_ALL_POKEMON";
+var REQUEST_ALL_POKEMON = "REQUEST_ALL_POKEMON";
+
 var receiveAllPokemon = function receiveAllPokemon(pokemon) {
   return {
     type: RECEIVE_ALL_POKEMON,
     pokemon: pokemon
+  };
+};
+var requestAllPokemon = function requestAllPokemon() {
+  return function (dispatch) {
+    _util_api_util__WEBPACK_IMPORTED_MODULE_0__["fetchAllPokemon"]().then(function (response) {
+      return dispatch(receiveAllPokemon(response));
+    });
+  };
+};
+
+/***/ }),
+
+/***/ "./frontend/middleware/thunk.js":
+/*!**************************************!*\
+  !*** ./frontend/middleware/thunk.js ***!
+  \**************************************/
+/*! exports provided: thunk */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "thunk", function() { return thunk; });
+var thunk = function thunk(_ref) {
+  var dispatch = _ref.dispatch,
+      getState = _ref.getState;
+  return function (next) {
+    return function (action) {
+      if (typeof action === "function") {
+        return action(dispatch, getState);
+      } else {
+        return next(action);
+      }
+    };
   };
 };
 
@@ -130,8 +168,8 @@ __webpack_require__.r(__webpack_exports__);
 
 document.addEventListener("DOMContentLoaded", function () {
   var store;
-  store = Object(_store_store__WEBPACK_IMPORTED_MODULE_4__["configureStore"])(); // window.store = store;
-
+  store = Object(_store_store__WEBPACK_IMPORTED_MODULE_4__["configureStore"])();
+  window.requestAllPokemon = _actions_pokemon_actions__WEBPACK_IMPORTED_MODULE_3__["requestAllPokemon"];
   window.getState = store.getState;
   window.dispatch = store.dispatch;
   var rootEl = document.getElementById("root");
@@ -224,11 +262,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _middleware_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../middleware/thunk */ "./frontend/middleware/thunk.js");
+
 
 
 
 var configureStore = function configureStore() {
-  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_1__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a));
+  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_1__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(_middleware_thunk__WEBPACK_IMPORTED_MODULE_3__["thunk"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a));
 };
 
 /***/ }),
