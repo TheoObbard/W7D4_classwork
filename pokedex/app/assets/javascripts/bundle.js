@@ -129,12 +129,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  var store = Object(_store_store__WEBPACK_IMPORTED_MODULE_4__["configureStore"])();
+  var store;
+  store = Object(_store_store__WEBPACK_IMPORTED_MODULE_4__["configureStore"])(); // window.store = store;
+
   window.getState = store.getState;
   window.dispatch = store.dispatch;
   var rootEl = document.getElementById("root");
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "this is react"), rootEl);
 });
+window.receiveAllPokemon = _actions_pokemon_actions__WEBPACK_IMPORTED_MODULE_3__["receiveAllPokemon"];
+window.fetchAllPokemon = _util_api_util__WEBPACK_IMPORTED_MODULE_2__["fetchAllPokemon"];
 
 /***/ }),
 
@@ -224,7 +228,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var configureStore = function configureStore() {
-  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_1__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddlware"])(redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a));
+  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_1__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a));
 };
 
 /***/ }),
